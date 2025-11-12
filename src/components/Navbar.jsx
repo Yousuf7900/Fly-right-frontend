@@ -1,10 +1,11 @@
 
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 
 const Navbar = () => {
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
     const links = (
         <>
             <li><Link to="/">Home</Link></li>
@@ -14,6 +15,11 @@ const Navbar = () => {
             <li><Link to="/my-applications">My Visa Applications</Link></li>
         </>
     );
+
+    const handleLogOut = () => {
+        logout();
+        navigate('/login');
+    }
 
     return (
         <header className="sticky top-0 z-40 bg-base-100/90 backdrop-blur border-b border-base-200">
@@ -60,7 +66,7 @@ const Navbar = () => {
 
                 <div className="navbar-end gap-2">
                     {
-                        user && user?.email ? <button className="btn btn-sm">Logout</button> : <div className="navbar-end gap-2">
+                        user && user?.email ? <button onClick={handleLogOut} className="btn btn-sm">Logout</button> : <div className="navbar-end gap-2">
                             <Link to="/login" className="btn btn-sm">Login</Link>
                             <Link to="/register" className="btn btn-sm">Register</Link>
                         </div>

@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthProvider";
 
 const Login = () => {
 
-    const { LogInWithEmailAndPassword, setUser } = useContext(AuthContext);
+    const { LogInWithEmailAndPassword, setUser, googleSignIn } = useContext(AuthContext);
 
     const handleSignInWithPassword = (e) => {
         e.preventDefault();
@@ -18,6 +18,16 @@ const Login = () => {
             .then(result => {
                 console.log(result.user);
                 setUser(result.user);
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
+    }
+    const handleGoogleSignIn = () => {
+        googleSignIn()
+            .then(res => {
+                console.log(res.user);
+                setUser(res.user);
             })
             .catch(err => {
                 console.log(err.message);
@@ -86,7 +96,7 @@ const Login = () => {
 
                     <div className="divider text-sm text-base-content/60">OR</div>
 
-                    <button
+                    <button onClick={handleGoogleSignIn}
                         type="button"
                         className="btn w-full btn-outline gap-2 font-medium hover:bg-base-200 transition-all"
                     >

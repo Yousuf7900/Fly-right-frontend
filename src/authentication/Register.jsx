@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 
 const Register = () => {
-    const { createUser, setUser } = useContext(AuthContext);
+    const { createUser, setUser, googleSignIn } = useContext(AuthContext);
 
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
@@ -24,6 +24,16 @@ const Register = () => {
                 const user = result.user;
                 setUser(user);
                 console.log(user);
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
+    }
+
+    const handleGoogleSignIn = () => {
+        googleSignIn()
+            .then(res => {
+                setUser(res.user);
             })
             .catch(err => {
                 console.log(err.message);
@@ -122,6 +132,7 @@ const Register = () => {
                     <div className="divider text-sm text-base-content/60">OR</div>
 
                     <button
+                        onClick={handleGoogleSignIn}
                         type="button"
                         className="btn w-full btn-outline gap-2 font-medium hover:bg-base-200 transition-all"
                     >
