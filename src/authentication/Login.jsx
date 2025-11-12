@@ -1,8 +1,28 @@
 // Login.jsx
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
 
 const Login = () => {
+
+    const { LogInWithEmailAndPassword, setUser } = useContext(AuthContext);
+
+    const handleSignInWithPassword = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        LogInWithEmailAndPassword(email, password)
+            .then(result => {
+                console.log(result.user);
+                setUser(result.user);
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
+    }
     return (
         <main className="min-h-screen flex items-center justify-center bg-linear-to-br from-base-200 via-base-100 to-base-200 px-4">
             <div className="w-full max-w-md bg-base-100 rounded-2xl shadow-xl border border-base-300 p-8 md:p-10">
@@ -15,7 +35,7 @@ const Login = () => {
                     </p>
                 </div>
 
-                <form className="space-y-5">
+                <form onSubmit={handleSignInWithPassword} className="space-y-5">
 
                     <div className="form-control">
                         <label htmlFor="email" className="label">

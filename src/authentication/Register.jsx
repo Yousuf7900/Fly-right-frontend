@@ -1,8 +1,35 @@
 
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
 
 const Register = () => {
+    const { createUser, setUser } = useContext(AuthContext);
+
+    const handleRegisterSubmit = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const name = form.name.value;
+        const email = form.email.value;
+        const photo = form.photoURL.value;
+        const password = form.password.value;
+        const newUserInfo = {
+            name, email, photo, password
+        }
+        console.log(newUserInfo);
+
+        createUser(email, password)
+            .then(result => {
+                const user = result.user;
+                setUser(user);
+                console.log(user);
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
+    }
+
     return (
         <main className="min-h-screen flex items-center justify-center bg-linear-to-br from-base-200 via-base-100 to-base-200 px-4">
             <div className="w-full max-w-md bg-base-100 rounded-2xl shadow-xl border border-base-300 p-8 md:p-10">
@@ -17,7 +44,7 @@ const Register = () => {
                 </div>
 
 
-                <form className="space-y-5">
+                <form onSubmit={handleRegisterSubmit} className="space-y-5">
 
                     <div className="form-control">
                         <label htmlFor="name" className="label">
@@ -29,7 +56,7 @@ const Register = () => {
                             id="name"
                             name="name"
                             type="text"
-                            placeholder="John Doe"
+                            placeholder="Enter your name"
                             required
                             className="input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all"
                         />
