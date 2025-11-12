@@ -16,15 +16,28 @@ const Register = () => {
         const email = form.email.value;
         const photo = form.photoURL.value;
         const password = form.password.value;
-        const newUserInfo = {
-            name, email, photo, password
-        }
-        console.log(newUserInfo);
 
         createUser(email, password)
             .then(result => {
                 const user = result.user;
                 setUser(user);
+                const createdAt = user?.metadata?.createdAt;
+                const newUserInfo = {
+                    name, email, photo, createdAt
+                }
+                console.log(newUserInfo);
+                fetch('http://localhost:5000/users', {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify(newUserInfo)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+
                 navigate(location?.state ? location.state : '/');
             })
             .catch(err => {
