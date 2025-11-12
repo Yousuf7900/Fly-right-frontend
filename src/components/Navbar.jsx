@@ -6,13 +6,21 @@ import { AuthContext } from "../context/AuthProvider";
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
-    const links = (
+    const publicLinks = (
+        <>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/visas">All Visas</Link></li>
+            <li><Link to="/about">About</Link></li>
+        </>
+    );
+    const privateLinks = (
         <>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/visas">All Visas</Link></li>
             <li><Link to="/add-visa">Add Visa</Link></li>
             <li><Link to="/my-added-visas">My Added Visas</Link></li>
             <li><Link to="/my-applications">My Visa Applications</Link></li>
+            <li><Link to="/about">About</Link></li>
         </>
     );
 
@@ -46,7 +54,9 @@ const Navbar = () => {
                             tabIndex={0}
                             className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow bg-base-100 rounded-box w-56"
                         >
-                            {links}
+                            {
+                                user && user?.email ? privateLinks : publicLinks
+                            }
                         </ul>
                     </div>
 
@@ -60,7 +70,9 @@ const Navbar = () => {
 
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1 gap-1">
-                        {links}
+                        {
+                            user && user?.email ? privateLinks : publicLinks
+                        }
                     </ul>
                 </div>
 

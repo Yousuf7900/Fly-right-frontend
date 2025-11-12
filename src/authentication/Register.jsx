@@ -1,11 +1,12 @@
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 
 const Register = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { createUser, setUser, googleSignIn } = useContext(AuthContext);
 
     const handleRegisterSubmit = (e) => {
@@ -24,8 +25,7 @@ const Register = () => {
             .then(result => {
                 const user = result.user;
                 setUser(user);
-                console.log(user);
-                navigate('/');
+                navigate(location?.state ? location.state : '/');
             })
             .catch(err => {
                 console.log(err.message);
@@ -36,7 +36,7 @@ const Register = () => {
         googleSignIn()
             .then(res => {
                 setUser(res.user);
-                navigate('/');
+                navigate(location?.state ? location.state : '/');
             })
             .catch(err => {
                 console.log(err.message);

@@ -1,11 +1,12 @@
 // Login.jsx
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 
 const Login = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { LogInWithEmailAndPassword, setUser, googleSignIn } = useContext(AuthContext);
 
     const handleSignInWithPassword = (e) => {
@@ -18,7 +19,7 @@ const Login = () => {
             .then(result => {
                 console.log(result.user);
                 setUser(result.user);
-                navigate('/');
+                navigate(location?.state ? location.state : '/');
             })
             .catch(err => {
                 console.log(err.message);
@@ -29,7 +30,7 @@ const Login = () => {
             .then(res => {
                 console.log(res.user);
                 setUser(res.user);
-                navigate('/');
+                navigate(location?.state ? location.state : '/');
             })
             .catch(err => {
                 console.log(err.message);
