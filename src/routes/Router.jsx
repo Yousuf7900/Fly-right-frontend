@@ -9,6 +9,8 @@ import PrivateRoute from "./PrivateRoute";
 import MyAddedVisas from "../pages/MyAddedVisas";
 import MyApplications from "../pages/MyApplications";
 import Home from "../pages/Home";
+import VisaDetails from "../pages/VisaDetails";
+import About from "../pages/About";
 
 const Router = createBrowserRouter([
     {
@@ -40,11 +42,19 @@ const Router = createBrowserRouter([
             {
                 path: '/my-added-visas',
                 element: <PrivateRoute><MyAddedVisas></MyAddedVisas></PrivateRoute>,
-                // loader: () => fetch("http://localhost:5000/visas")
             },
             {
                 path: '/my-applications',
                 element: <PrivateRoute><MyApplications></MyApplications></PrivateRoute>
+            },
+            {
+                path: '/visa/:id',
+                element: <PrivateRoute><VisaDetails></VisaDetails></PrivateRoute>,
+                loader: ({ params }) => fetch(`http://localhost:5000/visas/${params.id}`)
+            },
+            {
+                path: '/about',
+                element: <About></About>
             }
         ]
     },

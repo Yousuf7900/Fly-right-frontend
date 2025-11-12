@@ -48,7 +48,7 @@ const AllVisaCard = ({ visa }) => {
                 </ul>
 
                 <div className="card-actions justify-end mt-4">
-                    <Link to={`/visas/${_id}`} className="btn btn-primary btn-sm">
+                    <Link to={`/visa/${_id}`} className="btn btn-primary btn-sm">
                         See details
                     </Link>
                 </div>
