@@ -6,6 +6,7 @@ const VisaDetails = () => {
     const navigate = useNavigate();
     const visa = useLoaderData();
     const {
+        _id,
         country_image,
         country_name,
         visa_type,
@@ -30,8 +31,20 @@ const VisaDetails = () => {
         const first_name = form.first_name.value;
         const last_name = form.last_name.value;
         const date = form.date.value;
-        const fee = form.fee.value;
-        const applicationInfo = { email, first_name, last_name, date, fee };
+        const applicationInfo = {
+            _id,
+            country_image,
+            country_name,
+            visa_type,
+            processing_time,
+            fee,
+            validity,
+            application_method,
+            date,
+            first_name,
+            last_name,
+            email
+        };
 
         fetch('http://localhost:5000/applied-visa', {
             method: "POST",
