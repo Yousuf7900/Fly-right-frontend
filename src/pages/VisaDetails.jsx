@@ -1,6 +1,9 @@
-import { useLoaderData } from "react-router-dom";
+import { useContext } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthProvider";
 
 const VisaDetails = () => {
+    const navigate = useNavigate();
     const visa = useLoaderData();
     const {
         country_image,
@@ -14,6 +17,35 @@ const VisaDetails = () => {
         validity,
         application_method,
     } = visa || {};
+    const { user } = useContext(AuthContext);
+
+    const handleApplyButton = () => {
+        document.getElementById('my_modal_5').showModal();
+    };
+
+    const handleApplyVisa = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const email = form.email.value;
+        const first_name = form.first_name.value;
+        const last_name = form.last_name.value;
+        const date = form.date.value;
+        const fee = form.fee.value;
+        const applicationInfo = { email, first_name, last_name, date, fee };
+
+        fetch('http://localhost:5000/applied-visa', {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(applicationInfo)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                navigate('/my-applications');
+            })
+    }
 
     return (
         <section className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-12">
@@ -81,8 +113,85 @@ const VisaDetails = () => {
                         </p>
                     </div>
 
+
+                    {/* modal data */}
+                    <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+                        <div className="modal-box rounded-xl border border-base-300 shadow-lg">
+                            <h3 className="text-2xl font-bold text-primary mb-4">Apply for Visa</h3>
+
+                            <form onSubmit={handleApplyVisa} method="dialog" className="space-y-4">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-medium">Email</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={user?.email}
+                                        readOnly
+                                        className="input input-bordered bg-base-200 cursor-not-allowed"
+                                    />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-medium">First Name</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="first_name"
+                                        placeholder="Enter first name"
+                                        className="input input-bordered"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-medium">Last Name</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="last_name"
+                                        placeholder="Enter last name"
+                                        className="input input-bordered"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-medium">Applied Date</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="date"
+                                        value={new Date().toLocaleDateString()}
+                                        readOnly
+                                        className="input input-bordered bg-base-200 cursor-not-allowed"
+                                    />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-medium">Fee</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="fee"
+                                        value={`$${visa?.fee || 0}`}
+                                        readOnly
+                                        className="input input-bordered bg-base-200 cursor-not-allowed"
+                                    />
+                                </div>
+                                <div className="modal-action">
+                                    <button className="btn btn-primary w-full font-semibold tracking-wide">
+                                        Apply
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </dialog>
+
+
                     <div className="pt-6 text-center">
-                        <button className="btn btn-primary btn-wide text-lg font-semibold">
+                        <button onClick={handleApplyButton} className="btn btn-primary btn-wide text-lg font-semibold">
                             Apply for the Visa
                         </button>
                     </div>
