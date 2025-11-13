@@ -2,6 +2,7 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
@@ -26,6 +27,22 @@ const Navbar = () => {
 
     const handleLogOut = () => {
         logout();
+        Swal.fire({
+            position: "top",
+            icon: "success",
+            title: `Successfully logged out`,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            background: "#f8fafc",
+            color: "#0f172a",
+            iconColor: "#3b82f6",
+            width: "340px",
+            customClass: {
+                popup: "rounded-xl shadow-xl border border-gray-200",
+                title: "text-base font-semibold"
+            }
+        });
         navigate('/login');
     }
 

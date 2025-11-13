@@ -1,8 +1,11 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const AddVisa = () => {
     const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleAddVisaForm = (e) => {
         e.preventDefault();
@@ -44,6 +47,23 @@ const AddVisa = () => {
             .then(res => res.json())
             .then(data => {
                 console.log(data);
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: `Visa added successfully`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    background: "#f8fafc",
+                    color: "#0f172a",
+                    iconColor: "#3b82f6",
+                    width: "340px",
+                    customClass: {
+                        popup: "rounded-xl shadow-xl border border-gray-200",
+                        title: "text-base font-semibold"
+                    }
+                });
+                navigate('/my-added-visas');
             })
     }
     return (

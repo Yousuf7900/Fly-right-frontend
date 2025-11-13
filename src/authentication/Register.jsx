@@ -3,11 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
+import Swal from "sweetalert2";
 
 const Register = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { createUser, setUser, googleSignIn } = useContext(AuthContext);
+    const { createUser, setUser, googleSignIn, setLoading } = useContext(AuthContext);
 
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
@@ -21,6 +22,22 @@ const Register = () => {
             .then(result => {
                 const user = result.user;
                 setUser(user);
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: `Welcome Mr/Mrs. ${result.user.email}`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    background: "#f8fafc",
+                    color: "#0f172a",
+                    iconColor: "#3b82f6",
+                    width: "340px",
+                    customClass: {
+                        popup: "rounded-xl shadow-xl border border-gray-200",
+                        title: "text-base font-semibold"
+                    }
+                });
                 const createdAt = user?.metadata?.createdAt;
                 const newUserInfo = {
                     name, email, photo, createdAt
@@ -42,6 +59,23 @@ const Register = () => {
             })
             .catch(err => {
                 console.log(err.message);
+                setLoading(false);
+                navigate(location?.state ? location.state : '/login');
+                Swal.fire({
+                    icon: "error",
+                    title: "Register Failed",
+                    text: err.message || "Something went wrong. Please try again.",
+                    showConfirmButton: true,
+                    confirmButtonColor: "#dc2626",
+                    background: "#fef2f2",
+                    color: "#7f1d1d",
+                    width: "360px",
+                    customClass: {
+                        popup: "rounded-xl border border-red-300 shadow-md",
+                        title: "text-lg font-semibold",
+                        htmlContainer: "text-sm",
+                    }
+                });
             })
     }
 
@@ -49,10 +83,28 @@ const Register = () => {
         googleSignIn()
             .then(res => {
                 setUser(res.user);
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: `Welcome Mr/Mrs. ${res.user.email}`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    background: "#f8fafc",
+                    color: "#0f172a",
+                    iconColor: "#3b82f6",
+                    width: "340px",
+                    customClass: {
+                        popup: "rounded-xl shadow-xl border border-gray-200",
+                        title: "text-base font-semibold"
+                    }
+                });
                 navigate(location?.state ? location.state : '/');
             })
             .catch(err => {
                 console.log(err.message);
+                setLoading(false);
+                navigate(location?.state ? location.state : '/login');
             })
     }
 
