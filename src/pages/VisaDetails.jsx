@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
-
+import Swal from "sweetalert2";
 const VisaDetails = () => {
     const navigate = useNavigate();
     const visa = useLoaderData();
@@ -23,7 +23,6 @@ const VisaDetails = () => {
     const handleApplyButton = () => {
         document.getElementById('my_modal_5').showModal();
     };
-
     const handleApplyVisa = (e) => {
         e.preventDefault();
         const form = e.target;
@@ -31,8 +30,9 @@ const VisaDetails = () => {
         const first_name = form.first_name.value;
         const last_name = form.last_name.value;
         const date = form.date.value;
+        const id = _id;
         const applicationInfo = {
-            _id,
+            id,
             country_image,
             country_name,
             visa_type,
@@ -55,7 +55,22 @@ const VisaDetails = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: `Visa applied successfully`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    background: "#f8fafc",
+                    color: "#0f172a",
+                    iconColor: "#3b82f6",
+                    width: "340px",
+                    customClass: {
+                        popup: "rounded-xl shadow-xl border border-gray-200",
+                        title: "text-base font-semibold"
+                    }
+                });
                 navigate('/my-applications');
             })
     }
@@ -131,7 +146,9 @@ const VisaDetails = () => {
                     <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
                         <div className="modal-box rounded-xl border border-base-300 shadow-lg">
                             <h3 className="text-2xl font-bold text-primary mb-4">Apply for Visa</h3>
-
+                            <form method="dialog">
+                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
                             <form onSubmit={handleApplyVisa} method="dialog" className="space-y-4">
                                 <div className="form-control">
                                     <label className="label">

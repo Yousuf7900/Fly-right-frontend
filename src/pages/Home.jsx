@@ -1,10 +1,21 @@
-// Home.jsx
+
 import { Link } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
 import CountUp from "react-countup";
+import { useEffect, useState } from "react";
 
 
 const Home = () => {
+    const [latestVisas, setLatestVisas] = useState([]);
+    useEffect(() => {
+        fetch("http://localhost:5000/visas", {
+            method: "GET"
+        })
+            .then(res => res.json())
+            .then(data => {
+                setLatestVisas(data);
+            })
+    }, [])
     return (
         <main className="bg-base-100 text-base-content">
 
@@ -141,7 +152,7 @@ const Home = () => {
 
             <section className="bg-base-200 border-y border-base-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    <header className="flex items-end justify-between mb-6">
+                    <header className="flex items-end justify-between mb-6 gap-4">
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
                                 Latest visas
@@ -156,44 +167,62 @@ const Home = () => {
                     </header>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {
-                            [1, 2, 3, 4, 5, 6].map((i) => (
-                                <article
-                                    key={i}
-                                    className="card bg-base-100 shadow hover:shadow-lg transition border border-base-300"
-                                >
-                                    <figure className="h-40 overflow-hidden">
-                                        <img
-                                            className="w-full h-full object-cover"
-                                            src={`https://picsum.photos/seed/visa${i}/640/360`}
-                                            alt="Visa card"
-                                        />
-                                    </figure>
-                                    <div className="card-body">
-                                        <h3 className="card-title">Country Name {i}</h3>
-                                        <p className="text-sm text-base-content/70">
-                                            Tourist visa • Processing: 5–7 business days
-                                        </p>
-                                        <div className="mt-2 flex items-center justify-between">
-                                            <span className="badge badge-primary badge-outline">
-                                                $35 fee
-                                            </span>
-                                            <span className="text-xs text-base-content/60">
-                                                Validity: 90 days
-                                            </span>
-                                        </div>
-                                        <div className="card-actions justify-end mt-3">
-                                            <Link to={`/visas/${i}`} className="btn btn-sm btn-primary">
-                                                See details
-                                            </Link>
-                                        </div>
+                        {latestVisas.map((visa) => (
+                            <article
+                                key={visa._id}
+                                className="card bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition"
+                            >
+                                <figure className="h-40 overflow-hidden rounded-t-2xl">
+                                    <img
+                                        src={visa.country_image}
+                                        alt={visa.country_name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </figure>
+
+                                <div className="card-body p-5">
+                                    <div className="flex items-start justify-between gap-2 mb-2">
+                                        <h3 className="text-lg font-semibold leading-tight">
+                                            {visa.country_name}
+                                        </h3>
+                                        <span className="badge badge-primary badge-outline text-xs">
+                                            {visa.visa_type}
+                                        </span>
                                     </div>
-                                </article>
-                            ))
-                        }
+
+                                    <ul className="text-sm text-base-content/70 space-y-1 mb-4">
+                                        <li className="flex justify-between">
+                                            <span>Processing</span>
+                                            <span className="font-medium text-base-content">
+                                                {visa.processing_time}
+                                            </span>
+                                        </li>
+                                        <li className="flex justify-between">
+                                            <span>Fee</span>
+                                            <span className="font-medium text-primary">
+                                                ${visa.fee}
+                                            </span>
+                                        </li>
+                                        <li className="flex justify-between">
+                                            <span>Validity</span>
+                                            <span className="font-medium text-base-content">
+                                                {visa.validity}
+                                            </span>
+                                        </li>
+                                        <li className="flex justify-between">
+                                            <span>Method</span>
+                                            <span className="font-medium text-base-content">
+                                                {visa.application_method}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </article>
+                        ))}
                     </div>
                 </div>
             </section>
+
 
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <header className="mb-8">
@@ -206,7 +235,6 @@ const Home = () => {
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Card 1 */}
                     <div className="p-6 rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-md transition">
                         <h3 className="font-semibold text-lg">Clear Requirements</h3>
                         <p className="text-base-content/70 mt-1">
@@ -214,7 +242,6 @@ const Home = () => {
                         </p>
                     </div>
 
-                    {/* Card 2 */}
                     <div className="p-6 rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-md transition">
                         <h3 className="font-semibold text-lg">Fast Applications</h3>
                         <p className="text-base-content/70 mt-1">
@@ -222,7 +249,6 @@ const Home = () => {
                         </p>
                     </div>
 
-                    {/* Card 3 */}
                     <div className="p-6 rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-md transition">
                         <h3 className="font-semibold text-lg">Secure & Private</h3>
                         <p className="text-base-content/70 mt-1">
@@ -232,7 +258,6 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* ===== How It Works Section ===== */}
             <section className="bg-base-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <header className="mb-8">
@@ -245,7 +270,6 @@ const Home = () => {
                     </header>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Step 1 */}
                         <div className="p-6 rounded-2xl border border-base-300 bg-base-100 shadow-sm">
                             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold mb-3">
                                 1
@@ -256,7 +280,6 @@ const Home = () => {
                             </p>
                         </div>
 
-                        {/* Step 2 */}
                         <div className="p-6 rounded-2xl border border-base-300 bg-base-100 shadow-sm">
                             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold mb-3">
                                 2
@@ -267,7 +290,6 @@ const Home = () => {
                             </p>
                         </div>
 
-                        {/* Step 3 */}
                         <div className="p-6 rounded-2xl border border-base-300 bg-base-100 shadow-sm">
                             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold mb-3">
                                 3
