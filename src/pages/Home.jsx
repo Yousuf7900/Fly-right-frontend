@@ -167,7 +167,7 @@ const Home = () => {
                     </header>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {latestVisas.map((visa) => (
+                        {latestVisas.slice(0, 6).map((visa) => (
                             <article
                                 key={visa._id}
                                 className="card bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition"
