@@ -1,7 +1,6 @@
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import Swal from "sweetalert2";
 
@@ -9,6 +8,7 @@ const Register = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { createUser, setUser, googleSignIn, setLoading } = useContext(AuthContext);
+    const [passwordError, setPasswordError] = useState("");
 
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
@@ -18,8 +18,19 @@ const Register = () => {
         const photo = form.photoURL.value;
         const password = form.password.value;
 
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+
+        if (!passwordRegex.test(password)) {
+            setPasswordError(
+                "Password must be at least 6 characters and include both uppercase and lowercase letters."
+            );
+            return;
+        } else {
+            setPasswordError("");
+        }
+
         createUser(email, password)
-            .then(result => {
+            .then((result) => {
                 const user = result.user;
                 setUser(user);
                 Swal.fire({
@@ -35,32 +46,36 @@ const Register = () => {
                     width: "340px",
                     customClass: {
                         popup: "rounded-xl shadow-xl border border-gray-200",
-                        title: "text-base font-semibold"
-                    }
+                        title: "text-base font-semibold",
+                    },
                 });
+
                 const createdAt = user?.metadata?.createdAt;
                 const newUserInfo = {
-                    name, email, photo, createdAt
-                }
-                console.log(newUserInfo);
-                fetch('http://localhost:5000/users', {
+                    name,
+                    email,
+                    photo,
+                    createdAt,
+                };
+
+                fetch("http://localhost:5000/users", {
                     method: "POST",
                     headers: {
-                        "content-type": "application/json"
+                        "content-type": "application/json",
                     },
-                    body: JSON.stringify(newUserInfo)
+                    body: JSON.stringify(newUserInfo),
                 })
-                    .then(res => res.json())
-                    .then(data => {
+                    .then((res) => res.json())
+                    .then((data) => {
                         console.log(data);
-                    })
+                    });
 
-                navigate(location?.state ? location.state : '/');
+                navigate(location?.state ? location.state : "/");
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err.message);
                 setLoading(false);
-                navigate(location?.state ? location.state : '/login');
+                navigate(location?.state ? location.state : "/login");
                 Swal.fire({
                     icon: "error",
                     title: "Register Failed",
@@ -74,14 +89,14 @@ const Register = () => {
                         popup: "rounded-xl border border-red-300 shadow-md",
                         title: "text-lg font-semibold",
                         htmlContainer: "text-sm",
-                    }
+                    },
                 });
-            })
-    }
+            });
+    };
 
     const handleGoogleSignIn = () => {
         googleSignIn()
-            .then(res => {
+            .then((res) => {
                 setUser(res.user);
                 Swal.fire({
                     position: "top",
@@ -96,22 +111,21 @@ const Register = () => {
                     width: "340px",
                     customClass: {
                         popup: "rounded-xl shadow-xl border border-gray-200",
-                        title: "text-base font-semibold"
-                    }
+                        title: "text-base font-semibold",
+                    },
                 });
-                navigate(location?.state ? location.state : '/');
+                navigate(location?.state ? location.state : "/");
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err.message);
                 setLoading(false);
-                navigate(location?.state ? location.state : '/login');
-            })
-    }
+                navigate(location?.state ? location.state : "/login");
+            });
+    };
 
     return (
         <main className="min-h-screen flex items-center justify-center bg-linear-to-br from-base-200 via-base-100 to-base-200 px-4">
             <div className="w-full max-w-md bg-base-100 rounded-2xl shadow-xl border border-base-300 p-8 md:p-10">
-
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-extrabold text-primary tracking-tight mb-2 font-heading">
                         Create an Account
@@ -121,9 +135,7 @@ const Register = () => {
                     </p>
                 </div>
 
-
                 <form onSubmit={handleRegisterSubmit} className="space-y-5">
-
                     <div className="form-control">
                         <label htmlFor="name" className="label">
                             <span className="label-text font-medium text-base-content/80">
@@ -185,9 +197,15 @@ const Register = () => {
                             required
                             className="input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all"
                         />
-                        <p className="text-xs mt-2 text-base-content/60">
-                            Must contain at least 6 characters, 1 uppercase and 1 lowercase letter.
-                        </p>
+                        {
+                            passwordError && passwordError ? (
+                                <p className="text-xs mt-1 text-error">
+                                    {passwordError}
+                                </p>
+                            ) : <p className="text-xs mt-2 text-base-content/60">
+                                Must contain at least 6 characters, 1 uppercase and 1 lowercase letter.
+                            </p>
+                        }
                     </div>
 
                     <button
