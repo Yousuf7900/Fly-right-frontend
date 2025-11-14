@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 const Home = () => {
     const [latestVisas, setLatestVisas] = useState([]);
     useEffect(() => {
-        fetch("http://localhost:5000/visas", {
+        fetch("https://fly-right-server-side.vercel.app/visas", {
             method: "GET"
         })
             .then(res => res.json())

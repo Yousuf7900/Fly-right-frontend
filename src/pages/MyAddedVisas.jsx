@@ -10,7 +10,7 @@ const MyAddedVisas = () => {
     useEffect(() => {
         if (!user?.email) return;
 
-        fetch("http://localhost:5000/visas/my-visas", {
+        fetch("https://fly-right-server-side.vercel.app/visas/my-visas", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: user.email }),
@@ -31,7 +31,7 @@ const MyAddedVisas = () => {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/visas/${id}`, {
+                fetch(`https://fly-right-server-side.vercel.app/visas/${id}`, {
                     method: "DELETE",
                 })
                     .then((res) => res.json())
@@ -90,7 +90,7 @@ const MyAddedVisas = () => {
             ).map((input) => input.value),
         };
 
-        fetch(`http://localhost:5000/visas/${id}`, {
+        fetch(`https://fly-right-server-side.vercel.app/visas/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedVisa),

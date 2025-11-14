@@ -37,7 +37,7 @@ const AddVisa = () => {
             required_documents,
             description
         }
-        fetch('http://localhost:5000/visas', {
+        fetch('https://fly-right-server-side.vercel.app/visas', {
             method: "POST",
             headers: {
                 "content-type": "application/json"

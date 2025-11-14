@@ -8,7 +8,7 @@ const MyApplications = () => {
     useEffect(() => {
         if (!user?.email) return;
 
-        fetch("http://localhost:5000/applied-visa/my-visa", {
+        fetch("https://fly-right-server-side.vercel.app/applied-visa/my-visa", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -34,7 +34,7 @@ const MyApplications = () => {
             confirmButtonText: "Yes, cancel it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/applied-visa/${id}`, {
+                fetch(`https://fly-right-server-side.vercel.app/applied-visa/${id}`, {
                     method: "DELETE"
                 })
                     .then(res => res.json())

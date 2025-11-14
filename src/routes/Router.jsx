@@ -33,7 +33,7 @@ const Router = createBrowserRouter([
             {
                 path: '/visas',
                 element: <AllVisas></AllVisas>,
-                loader: () => fetch('http://localhost:5000/visas')
+                loader: () => fetch('https://fly-right-server-side.vercel.app/visas')
             },
             {
                 path: '/add-visa',
@@ -50,7 +50,7 @@ const Router = createBrowserRouter([
             {
                 path: '/visa/:id',
                 element: <PrivateRoute><VisaDetails></VisaDetails></PrivateRoute>,
-                loader: ({ params }) => fetch(`http://localhost:5000/visas/${params.id}`)
+                loader: ({ params }) => fetch(`https://fly-right-server-side.vercel.app/visas/${params.id}`)
             },
             {
                 path: '/about',

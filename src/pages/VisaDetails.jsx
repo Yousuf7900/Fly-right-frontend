@@ -49,7 +49,7 @@ const VisaDetails = () => {
             email,
         };
 
-        fetch("http://localhost:5000/applied-visa", {
+        fetch("https://fly-right-server-side.vercel.app/applied-visa", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -111,7 +111,7 @@ const VisaDetails = () => {
                             alt={country_name}
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-base-100/70 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-base-100/70 via-transparent to-transparent" />
                         <div className="absolute bottom-4 left-4 right-4 flex flex-col gap-2 text-base-100 drop-shadow-md">
                             <h1 className="text-2xl sm:text-3xl font-extrabold">
                                 {country_name}
