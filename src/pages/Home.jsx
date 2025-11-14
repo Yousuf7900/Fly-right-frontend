@@ -194,7 +194,7 @@ const Home = () => {
                                         <li className="flex justify-between">
                                             <span>Processing</span>
                                             <span className="font-medium text-base-content">
-                                                {visa.processing_time}
+                                                {visa.processing_time} days
                                             </span>
                                         </li>
                                         <li className="flex justify-between">
@@ -206,7 +206,7 @@ const Home = () => {
                                         <li className="flex justify-between">
                                             <span>Validity</span>
                                             <span className="font-medium text-base-content">
-                                                {visa.validity}
+                                                {visa.validity} days
                                             </span>
                                         </li>
                                         <li className="flex justify-between">
